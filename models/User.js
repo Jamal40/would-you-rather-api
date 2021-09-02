@@ -14,9 +14,6 @@ const userSchema = new mongoose.Schema({
   answers: {
     type: Object,
   },
-  questions: {
-    type: [String],
-  },
   password: {
     type: String,
     required: true,

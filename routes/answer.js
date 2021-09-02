@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Question = require("../models/Answer");
-const answerValidation = require("../validation");
+const { answerValidation } = require("../validation");
 const mongoose = require("mongoose");
 const Answer = require("../models/Answer");
 
@@ -13,13 +13,13 @@ router.post("/", async (req, res) => {
 
   const newAnswer = new Answer({
     userId: new mongoose.Types.ObjectId(req.body.userId),
-    questionId: new mongoogse.Type.ObjectId(req.body.questionId),
+    questionId: new mongoose.Types.ObjectId(req.body.questionId),
     answer: req.body.answer,
   });
 
   const savedAnswer = await newAnswer.save();
 
-  res.send(newAnswer);
+  res.send(savedAnswer);
 });
 
 module.exports = router;

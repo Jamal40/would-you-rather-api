@@ -15,20 +15,22 @@ const registerValidation = (data) => {
 const questionValidation = (data) => {
   const schema = Joi.object({
     author: Joi.string().required(),
-    timestamp: Joi.data().required(),
     optionOne: Joi.string().required(),
     optionTwo: Joi.string().required(),
   });
+  return schema.validate(data);
 };
 
 //Answer Validation
 const answerValidation = (data) => {
-  const schema = Joi.Object({
+  const schema = Joi.object({
     userId: Joi.string().required(),
     questionId: Joi.string().required(),
     answer: Joi.number().max(2).min(1).required(),
   });
+  return schema.validate(data);
 };
 
 module.exports.registerValidation = registerValidation;
 module.exports.questionValidation = questionValidation;
+module.exports.answerValidation = answerValidation;
