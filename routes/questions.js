@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Question = require("../models/Question");
+const { questionValidation } = require("../validation");
+
 const mongoose = require("mongoose");
 router.get("/", async (req, res) => {
   const allQuestions = await Question.find({});
@@ -7,6 +9,12 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  const { error } = questionValidation(req.body);
+
+  if (error) {
+    res.status(400).send(error.details[0].message);
+  }
+
   const newQuestion = new Question({
     author: new mongoose.Types.ObjectId(req.body.id),
     timestamp: new Date(),
