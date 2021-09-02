@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const Question = require("../models/Question");
 const { questionValidation } = require("../validation");
-
 const mongoose = require("mongoose");
+
 router.get("/", async (req, res) => {
   const allQuestions = await Question.aggregate([
     {
@@ -70,6 +70,22 @@ router.get("/:id", async (req, res) => {
     },
   ]);
   res.send(allQuestions);
+});
+
+router.get("/questionsCount/:id", async (req, res) => {
+  const authorId = mongoose.Types.ObjectId(req.params.id);
+  const questionsMade = await Question.aggregate([
+    {
+      $match: {
+        author: authorId,
+      },
+    },
+    {
+      $count: "questionsMade",
+    },
+  ]);
+
+  res.send(questionsMade);
 });
 
 router.post("/", async (req, res) => {

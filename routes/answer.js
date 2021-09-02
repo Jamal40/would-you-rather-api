@@ -22,4 +22,36 @@ router.post("/", async (req, res) => {
   res.send(savedAnswer);
 });
 
+router.get("/user-answers-count/:id", async (req, res) => {
+  const userId = mongoose.Types.ObjectId(req.params.id);
+
+  const answersCount = await Answer.aggregate([
+    {
+      $match: {
+        userId: userId,
+      },
+    },
+    {
+      $count: "answersCount",
+    },
+  ]);
+
+  res.send(answersCount);
+});
+
+router.get("/option-one-count/:questionId", async (req, res) => {
+  const questionId = mongoose.Types.ObjectId(req.params.questionId);
+
+  const optionOneCount = await Answer.aggregate([
+    {
+      $match: {
+        questionId: questionId,
+        answer: 1,
+      },
+    },
+    {
+      $count: "optionOnecount",
+    },
+  ]);
+});
 module.exports = router;
