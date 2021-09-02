@@ -53,5 +53,25 @@ router.get("/option-one-count/:questionId", async (req, res) => {
       $count: "optionOnecount",
     },
   ]);
+
+  res.send(optionOneCount);
+});
+
+router.get("/option-two-count/:questionId", async (req, res) => {
+  const questionId = mongoose.Types.ObjectId(req.params.questionId);
+
+  const optionTwoCount = await Answer.aggregate([
+    {
+      $match: {
+        questionId: questionId,
+        answer: 2,
+      },
+    },
+    {
+      $count: "optionTwoCount",
+    },
+  ]);
+
+  res.send(optionTwoCount);
 });
 module.exports = router;
