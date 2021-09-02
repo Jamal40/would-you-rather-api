@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
+var cors = require("cors");
 
 //import routes
 const authRoute = require("./routes/auth");
@@ -21,6 +21,7 @@ mongoose
   .catch((error) => console.log(error));
 
 // Route middlewares
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/user", authRoute);
