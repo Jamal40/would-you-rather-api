@@ -29,12 +29,6 @@ router.get("/", async (req, res) => {
       },
     },
     {
-      $unwind: {
-        path: "$answer",
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
       $project: {
         _id: 1,
         author: {
@@ -45,10 +39,25 @@ router.get("/", async (req, res) => {
         timestamp: 1,
         optionOne: 1,
         optionTwo: 1,
-        answer: 1,
+        answer: {
+          $filter: {
+            input: "$answer",
+            as: "ans",
+            cond: {
+              $eq: ["$$ans.userId", userId],
+            },
+          },
+        },
+      },
+    },
+    {
+      $unwind: {
+        path: "$answer",
+        preserveNullAndEmptyArrays: true,
       },
     },
   ]);
+
   res.send(allQuestions);
 });
 
