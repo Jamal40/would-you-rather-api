@@ -1,0 +1,100 @@
+1.Getting  queestions with answers
+
+[{
+    $lookup: {
+        from: 'users',
+        localField: 'author',
+        foreignField: '_id',
+        as: 'author'
+    }
+}, {
+    $unwind: {
+        path: "$author",
+    }
+}, {
+    $lookup: {
+        from: 'answers',
+        localField: '_id',
+        foreignField: 'questionId',
+        as: 'answer'
+    }
+}, {
+    $unwind: {
+        path: "$answer",
+        preserveNullAndEmptyArrays: true
+    }
+}, {
+    $project: {
+        _id: 1,
+        author: {
+            _id: 1,
+            name: 1,
+            avatarURL: 1,
+        },
+        timestamp: 1,
+        optionOne: 1,
+        optionTwo: 1,
+        answer: {
+            $cond: {
+                if: {
+                    "$eq": ["$answer.userId", ObjectId('612f811160ee31d4a879283c')]
+                },
+                then: "$answer",
+                else: "$$REMOVE"
+            }
+        }
+    }
+}]
+
+node:
+[
+  {
+    '$lookup': {
+      'from': 'users', 
+      'localField': 'author', 
+      'foreignField': '_id', 
+      'as': 'author'
+    }
+  }, {
+    '$unwind': {
+      'path': '$author'
+    }
+  }, {
+    '$lookup': {
+      'from': 'answers', 
+      'localField': '_id', 
+      'foreignField': 'questionId', 
+      'as': 'answer'
+    }
+  }, {
+    '$unwind': {
+      'path': '$answer', 
+      'preserveNullAndEmptyArrays': true
+    }
+  }, {
+    '$project': {
+      '_id': 1, 
+      'author': {
+        '_id': 1, 
+        'name': 1, 
+        'avatarURL': 1
+      }, 
+      'timestamp': 1, 
+      'optionOne': 1, 
+      'optionTwo': 1, 
+      'answer': {
+        '$cond': {
+          'if': {
+            '$eq': [
+              '$answer.userId', new ObjectId('612f811160ee31d4a879283c')
+            ]
+          }, 
+          'then': '$answer', 
+          'else': '$$REMOVE'
+        }
+      }
+    }
+  }
+]
+
+
