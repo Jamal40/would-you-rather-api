@@ -4,6 +4,8 @@ const { questionValidation } = require("../validation");
 const mongoose = require("mongoose");
 
 router.get("/", async (req, res) => {
+  const userId = mongoose.Types.ObjectId(req.query.userId);
+
   const allQuestions = await Question.aggregate([
     {
       $lookup: {
@@ -19,6 +21,20 @@ router.get("/", async (req, res) => {
       },
     },
     {
+      $lookup: {
+        from: "answers",
+        localField: "_id",
+        foreignField: "questionId",
+        as: "answer",
+      },
+    },
+    {
+      $unwind: {
+        path: "$answer",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
       $project: {
         _id: 1,
         author: {
@@ -29,6 +45,7 @@ router.get("/", async (req, res) => {
         timestamp: 1,
         optionOne: 1,
         optionTwo: 1,
+        answer: 1,
       },
     },
   ]);
