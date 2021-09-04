@@ -52,7 +52,6 @@ router.get("/leaderboards", async (req, res) => {
     },
   ]);
 
-  console.log("Dd");
   await res.send(leaderboards);
 });
 
