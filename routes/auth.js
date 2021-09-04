@@ -41,19 +41,19 @@ router.post("/login", async (req, res) => {
   const { error } = registerValidation(req.body);
 
   if (error) {
-    return res.status(400).send(error.details[0].message);
+    return res.status(400).send({ msg: error.details[0].message });
   }
 
   //Checking if the user is already in the database
   const user = await User.findOne({ name: req.body.name });
   if (!user) {
-    return res.status(400).send("Name doesn't exists");
+    return res.status(400).send({ msg: "Name doesn't exists" });
   }
 
   //Checking whether password is correct
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) {
-    return res.status(400).send("The password isn't correct");
+    return res.status(400).send({ msg: "The password isn't correct" });
   }
 
   // Create and assign a token
