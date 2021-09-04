@@ -98,6 +98,71 @@ router.get("/:id", async (req, res) => {
   res.send(allQuestions);
 });
 
+router.get("/stats/:id", async (req, res) => {
+  const questionId = mongoose.Types.ObjectId(req.params.id);
+
+  const resultQuestion = await Question.aggregate([
+    {
+      $match: {
+        _id: questionId,
+      },
+    },
+    {
+      $lookup: {
+        from: "answers",
+        localField: "_id",
+        foreignField: "questionId",
+        as: "answers",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "author",
+        foreignField: "_id",
+        as: "author",
+      },
+    },
+    {
+      $unwind: {
+        path: "$author",
+      },
+    },
+    {
+      $project: {
+        author: 1,
+        timestamp: 1,
+        optionOne: 1,
+        optionTwo: 1,
+        optionOneCount: {
+          $size: {
+            $filter: {
+              input: "$answers",
+              as: "ans",
+              cond: {
+                $eq: ["$$ans.answer", 1],
+              },
+            },
+          },
+        },
+        optionTwoCount: {
+          $size: {
+            $filter: {
+              input: "$answers",
+              as: "ans",
+              cond: {
+                $eq: ["$$ans.answer", 2],
+              },
+            },
+          },
+        },
+      },
+    },
+  ]);
+
+  res.send(resultQuestion);
+});
+
 router.get("/questionsCount/:id", async (req, res) => {
   const authorId = mongoose.Types.ObjectId(req.params.id);
   const questionsMade = await Question.aggregate([
