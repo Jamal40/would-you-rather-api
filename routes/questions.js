@@ -121,14 +121,14 @@ router.post("/", async (req, res) => {
     res.status(400).send(error.details[0].message);
   }
 
-  const newQuestion = new Question({
-    author: mongoose.Types.ObjectId(req.body.author),
-    timestamp: new Date(),
-    optionOne: req.body.optionOne,
-
-    optionTwo: req.body.optionTwo,
-  });
   try {
+    const newQuestion = new Question({
+      author: mongoose.Types.ObjectId(req.body.author),
+      timestamp: new Date(),
+      optionOne: req.body.optionOne,
+
+      optionTwo: req.body.optionTwo,
+    });
     const savedQuestion = await newQuestion.save();
     res.send(savedQuestion);
   } catch (err) {
