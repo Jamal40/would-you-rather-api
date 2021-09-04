@@ -160,7 +160,7 @@ router.get("/stats/:id", async (req, res) => {
     },
   ]);
 
-  res.send(resultQuestion);
+  res.send(resultQuestion[0]);
 });
 
 router.get("/questionsCount/:id", async (req, res) => {
