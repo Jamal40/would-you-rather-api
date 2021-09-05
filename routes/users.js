@@ -48,6 +48,11 @@ router.get("/leaderboards", async (req, res) => {
       },
     },
     {
+      $sort: {
+        totalScore: -1,
+      },
+    },
+    {
       $limit: 3,
     },
   ]);
