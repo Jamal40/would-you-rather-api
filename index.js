@@ -13,12 +13,9 @@ dotenv.config();
 
 //mogodb connection
 const mongoose = require("mongoose");
-mongoose
-  .connect(process.env.DB_CONNECT, () => {
-    console.log("successfully connected to the database");
-  })
-  .then(() => console.log("ggg"))
-  .catch((error) => console.log(error));
+mongoose.connect(process.env.DB_CONNECT, () => {
+  console.log("successfully connected to the database");
+});
 
 // Route middlewares
 app.use(cors());
@@ -28,6 +25,6 @@ app.use("/api/user", authRoute);
 app.use("/api/users", usersRoute);
 app.use("/api/questions", questionRoute);
 app.use("/api/answers", answersRoute);
-app.listen(1001, () => {
+app.listen(process.env.PORT || 1001, () => {
   console.log("Server is running on port 1001");
 });
