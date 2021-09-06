@@ -56,6 +56,9 @@ router.get("/", async (req, res) => {
         preserveNullAndEmptyArrays: true,
       },
     },
+    {
+      timestamp: -1,
+    },
   ]);
 
   res.send(allQuestions);
