@@ -57,7 +57,9 @@ router.get("/", async (req, res) => {
       },
     },
     {
-      timestamp: -1,
+      $sort: {
+        timestamp: -1,
+      },
     },
   ]);
 
